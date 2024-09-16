@@ -1,13 +1,19 @@
 package io.boxo.expo
 
+import android.os.Handler
+import android.os.Looper
+import com.appboxo.js.params.PaymentData
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import com.appboxo.sdk.*
 
 class ExpoBoxoSdkModule : Module() {
+    private var handler: Handler? = null
 
     override fun definition() = ModuleDefinition {
         Name("ExpoBoxoSdk")
+
+        handler = Handler(Looper.getMainLooper())
 
         Events("customEvent", "paymentEvent", "miniappLifecycle", "onAuth")
 
@@ -17,8 +23,7 @@ class ExpoBoxoSdkModule : Module() {
                 "dark" -> Config.Theme.DARK
                 else -> Config.Theme.SYSTEM
             }
-            Appboxo
-                .init(appContext.activityProvider!!.currentActivity.application)
+            Appboxo.init(appContext.activityProvider!!.currentActivity.application)
                 .setConfig(
                     Config.Builder()
                         .setClientId(options.clientId)
@@ -37,7 +42,20 @@ class ExpoBoxoSdkModule : Module() {
         Function("openMiniapp") { options: MiniappOptions ->
             val miniapp: Miniapp = Appboxo.getMiniapp(options.appId)
 //                .setCustomEventListener(this)
-//                .setPaymentEventListener(this)
+                .setPaymentEventListener { _, miniapp, paymentData ->
+                    sendEvent(
+                        "paymentEvent", mapOf(
+                            "appId" to miniapp.appId,
+                            "transactionToken" to paymentData.transactionToken,
+                            "miniappOrderId" to paymentData.miniappOrderId,
+                            "amount" to paymentData.amount,
+                            "currency" to paymentData.currency,
+                            "extraParams" to paymentData.extraParams,
+                            "hostappOrderId" to paymentData.hostappOrderId,
+                            "status" to paymentData.status,
+                        )
+                    )
+                }
                 .setAuthListener { _, miniapp ->
                     sendEvent("onAuth", mapOf("appId" to miniapp.appId))
                 }
@@ -71,12 +89,28 @@ class ExpoBoxoSdkModule : Module() {
             configBuilder.enableSplash(options.enableSplash)
             configBuilder.saveState(options.saveState)
             miniapp.setConfig(configBuilder.build())
-            miniapp.open(appContext.activityProvider!!.currentActivity)
+            miniapp.open(appContext.currentActivity!!)
         }
 
         Function("setAuthCode") { appId: String, authCode: String ->
             Appboxo.getMiniapp(appId)
                 .setAuthCode(authCode)
+        }
+        Function("sendPaymentEvent") { options: PaymentOptions ->
+            handler?.post {
+                Appboxo.getMiniapp(options.appId)
+                    .sendPaymentResult(
+                        PaymentData(
+                            transactionToken = options.transactionToken ?: "",
+                            miniappOrderId = options.miniappOrderId ?: "",
+                            amount = options.amount ?: 0.0,
+                            currency = options.currency ?: "",
+                            status = options.status ?: "",
+                            hostappOrderId = options.hostappOrderId ?: "",
+                            extraParams = options.extraParams
+                        )
+                    )
+            }
         }
 
         Function("closeMiniapp") { appId: String ->

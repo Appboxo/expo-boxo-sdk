@@ -2,6 +2,17 @@ export type AuthEventPayload = {
   appId: string;
 };
 
+export type PaymentData = {
+  appId: string;
+  transactionToken?: string;
+  miniappOrderId?: string;
+  amount?: number;
+  currency?: string;
+  extraParams?: Record<string, any>;
+  hostappOrderId?: string;
+  status?: string;
+};
+
 export type ConfigOptions = {
   clientId: string;
   userId?: string;

@@ -7,6 +7,12 @@ export default function App() {
     Boxo.addAuthListener((authEvent)=>{
         Boxo.setAuthCode(authEvent.appId, 'tNCYV57xV03Ds3ar63oQtddQxUxCRY')
     });
+    Boxo.addPaymentEventListener((paymentData)=>{
+        Boxo.hideMiniapps();
+        paymentData.status = "success";
+        Boxo.sendPaymentEvent(paymentData);
+        Boxo.openMiniapp({appId: paymentData.appId})
+    });
   return (
     <View style={styles.container}>
 
@@ -17,6 +23,7 @@ export default function App() {
                    <Text style={styles.buttonLabel}>Open Miniapp</Text>
                  </Pressable>
                </View>
+
     </View>
   );
 }
