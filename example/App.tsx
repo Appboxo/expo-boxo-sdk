@@ -3,7 +3,10 @@ import { StyleSheet, Text, View, Pressable } from 'react-native';
 import * as Boxo from 'expo-boxo-sdk';
 
 export default function App() {
-    Boxo.setConfig({clientId:'602248', multitaskMode: true})
+    Boxo.setConfig({clientId:'602248', multitaskMode: true});
+    Boxo.addAuthListener((authEvent)=>{
+        Boxo.setAuthCode(authEvent.appId, 'tNCYV57xV03Ds3ar63oQtddQxUxCRY')
+    });
   return (
     <View style={styles.container}>
 

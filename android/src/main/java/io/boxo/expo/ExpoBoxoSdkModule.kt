@@ -9,16 +9,16 @@ class ExpoBoxoSdkModule : Module() {
     override fun definition() = ModuleDefinition {
         Name("ExpoBoxoSdk")
 
-        Events("custom_event", "payment_event", "miniapp_lifecycle")
+        Events("customEvent", "paymentEvent", "miniappLifecycle", "onAuth")
 
         Function("setConfig") { options: ConfigOptions ->
-            Appboxo.init(appContext.activityProvider!!.currentActivity.application)
             val globalTheme: Config.Theme = when (options.theme) {
                 "light" -> Config.Theme.LIGHT
                 "dark" -> Config.Theme.DARK
                 else -> Config.Theme.SYSTEM
             }
             Appboxo
+                .init(appContext.activityProvider!!.currentActivity.application)
                 .setConfig(
                     Config.Builder()
                         .setClientId(options.clientId)
@@ -38,7 +38,9 @@ class ExpoBoxoSdkModule : Module() {
             val miniapp: Miniapp = Appboxo.getMiniapp(options.appId)
 //                .setCustomEventListener(this)
 //                .setPaymentEventListener(this)
-//                .setAuthListener(this)
+                .setAuthListener { _, miniapp ->
+                    sendEvent("onAuth", mapOf("appId" to miniapp.appId))
+                }
 //                .setLifecycleListener(this)
             if (options.data != null) miniapp.setData(options.data)
             val configBuilder = MiniappConfig.Builder()

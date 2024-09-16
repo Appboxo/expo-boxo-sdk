@@ -1,9 +1,7 @@
 import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-core';
 
-// Import the native module. On web, it will be resolved to ExpoBoxoSdk.web.ts
-// and on native platforms to ExpoBoxoSdk.ts
 import ExpoBoxoSdkModule from './ExpoBoxoSdkModule';
-import { ChangeEventPayload, ConfigOptions, MiniappOptions } from './ExpoBoxoSdk.types';
+import { AuthEventPayload, ConfigOptions, MiniappOptions } from './ExpoBoxoSdk.types';
 
 export function setConfig(options: ConfigOptions) {
   ExpoBoxoSdkModule.setConfig(options);
@@ -11,6 +9,10 @@ export function setConfig(options: ConfigOptions) {
 
 export function openMiniapp(options: MiniappOptions) {
   ExpoBoxoSdkModule.openMiniapp(options);
+}
+
+export function setAuthCode(appId:string, authCode:string) {
+  ExpoBoxoSdkModule.setAuthCode(appId, authCode);
 }
 
 export function logout() {
@@ -27,8 +29,8 @@ export function closeMiniapp(appId:string) {
 
 const emitter = new EventEmitter(ExpoBoxoSdkModule ?? NativeModulesProxy.ExpoBoxoSdk);
 
-export function addChangeListener(listener: (event: ChangeEventPayload) => void): Subscription {
-  return emitter.addListener<ChangeEventPayload>('onChange', listener);
+export function addAuthListener(listener: (event: AuthEventPayload) => void): Subscription {
+  return emitter.addListener<AuthEventPayload>('onAuth', listener);
 }
 
-export { ChangeEventPayload, ConfigOptions, MiniappOptions };
+export { AuthEventPayload, ConfigOptions, MiniappOptions };

@@ -1,5 +1,5 @@
-export type ChangeEventPayload = {
-  value: string;
+export type AuthEventPayload = {
+  appId: string;
 };
 
 export type ConfigOptions = {
