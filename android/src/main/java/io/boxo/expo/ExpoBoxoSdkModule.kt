@@ -2,46 +2,101 @@ package io.boxo.expo
 
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import com.appboxo.sdk.*
 
 class ExpoBoxoSdkModule : Module() {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
-  override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoBoxoSdk')` in JavaScript.
-    Name("ExpoBoxoSdk")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants(
-      "PI" to Math.PI
-    )
+    override fun definition() = ModuleDefinition {
+        Name("ExpoBoxoSdk")
 
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+        Events("custom_event", "payment_event", "miniapp_lifecycle")
 
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
+        Function("setConfig") { options: ConfigOptions ->
+            Appboxo.init(appContext.activityProvider!!.currentActivity.application)
+            val globalTheme: Config.Theme = when (options.theme) {
+                "light" -> Config.Theme.LIGHT
+                "dark" -> Config.Theme.DARK
+                else -> Config.Theme.SYSTEM
+            }
+            Appboxo
+                .setConfig(
+                    Config.Builder()
+                        .setClientId(options.clientId)
+                        .setUserId(options.userId)
+                        .sandboxMode(options.sandboxMode)
+                        .multitaskMode(options.multitaskMode)
+                        .setTheme(globalTheme)
+                        .setLanguage(options.language)
+                        .permissionsPage(options.showPermissionsPage)
+                        .showClearCache(options.showClearCache)
+                        .debug(options.isDebug)
+                        .build()
+                )
+        }
+
+        Function("openMiniapp") { options: MiniappOptions ->
+            val miniapp: Miniapp = Appboxo.getMiniapp(options.appId)
+//                .setCustomEventListener(this)
+//                .setPaymentEventListener(this)
+//                .setAuthListener(this)
+//                .setLifecycleListener(this)
+            if (options.data != null) miniapp.setData(options.data)
+            val configBuilder = MiniappConfig.Builder()
+            if (options.theme != null) {
+                val miniappTheme: Config.Theme? = when (options.theme) {
+                    "light" -> Config.Theme.LIGHT
+                    "dark" -> Config.Theme.DARK
+                    "system" -> Config.Theme.SYSTEM
+                    else -> null
+                }
+                if (miniappTheme != null) {
+                    configBuilder.setTheme(miniappTheme)
+                }
+            }
+            options.extraUrlParams?.also { extraUrlParams ->
+                val stringMap: MutableMap<String, String> = HashMap()
+                for ((key, value) in extraUrlParams) stringMap[key] = value.toString()
+                configBuilder.setExtraUrlParams(stringMap)
+            }
+            options.urlSuffix?.also { suffix -> configBuilder.setUrlSuffix(suffix) }
+            options.colors?.also { colors ->
+                configBuilder.setColors(
+                    colors["primaryColor"] ?: "",
+                    colors["secondaryColor"] ?: "",
+                    colors["tertiaryColor"] ?: "",
+                )
+            }
+            configBuilder.enableSplash(options.enableSplash)
+            configBuilder.saveState(options.saveState)
+            miniapp.setConfig(configBuilder.build())
+            miniapp.open(appContext.activityProvider!!.currentActivity)
+        }
+
+        Function("setAuthCode") { appId: String, authCode: String ->
+            Appboxo.getMiniapp(appId)
+                .setAuthCode(authCode)
+        }
+
+        Function("closeMiniapp") { appId: String ->
+            Appboxo.getExistingMiniapp(appId)?.close()
+        }
+
+        Function("hideMiniapps") {
+            Appboxo.hideMiniapps()
+        }
+        Function("logout") {
+            Appboxo.logout()
+        }
+
+        // Defines a JavaScript function that always returns a Promise and whose native code
+        // is by default dispatched on the different thread than the JavaScript runtime runs on.
+        AsyncFunction("setValueAsync") { value: String ->
+            // Send an event to JavaScript.
+            sendEvent(
+                "onChange", mapOf(
+                    "value" to value
+                )
+            )
+        }
     }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ExpoBoxoSdkView::class) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { view: ExpoBoxoSdkView, prop: String ->
-        println(prop)
-      }
-    }
-  }
 }
