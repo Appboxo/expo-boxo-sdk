@@ -13,6 +13,14 @@ export type PaymentData = {
   status?: string;
 };
 
+export type CustomEventData = {
+  appId: string;
+  requestId?: number;
+  type?: string;
+  errorType?: string;
+  payload?: Record<string, any>;
+};
+
 export type ConfigOptions = {
   clientId: string;
   userId?: string;

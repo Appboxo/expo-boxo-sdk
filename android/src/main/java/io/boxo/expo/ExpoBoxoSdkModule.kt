@@ -2,6 +2,7 @@ package io.boxo.expo
 
 import android.os.Handler
 import android.os.Looper
+import com.appboxo.js.params.CustomEvent
 import com.appboxo.js.params.PaymentData
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
@@ -41,7 +42,17 @@ class ExpoBoxoSdkModule : Module() {
 
         Function("openMiniapp") { options: MiniappOptions ->
             val miniapp: Miniapp = Appboxo.getMiniapp(options.appId)
-//                .setCustomEventListener(this)
+                .setCustomEventListener { _, miniapp, customEvent ->
+                    sendEvent(
+                        "customEvent", mapOf(
+                            "appId" to miniapp.appId,
+                            "requestId" to customEvent.requestId,
+                            "type" to customEvent.type,
+                            "errorType" to customEvent.errorType,
+                            "payload" to customEvent.payload,
+                        )
+                    )
+                }
                 .setPaymentEventListener { _, miniapp, paymentData ->
                     sendEvent(
                         "paymentEvent", mapOf(
@@ -96,18 +107,33 @@ class ExpoBoxoSdkModule : Module() {
             Appboxo.getMiniapp(appId)
                 .setAuthCode(authCode)
         }
-        Function("sendPaymentEvent") { options: PaymentOptions ->
+
+        Function("sendCustomEvent") { customEvent: CustomEventData ->
             handler?.post {
-                Appboxo.getMiniapp(options.appId)
+                Appboxo.getMiniapp(customEvent.appId)
+                    .sendEvent(
+                        CustomEvent(
+                            requestId = customEvent.requestId,
+                            type = customEvent.type ?: "",
+                            errorType = customEvent.errorType,
+                            payload = customEvent.payload ?: emptyMap()
+                        )
+                    )
+            }
+        }
+
+        Function("sendPaymentEvent") { paymentEvent: PaymentEventData ->
+            handler?.post {
+                Appboxo.getMiniapp(paymentEvent.appId)
                     .sendPaymentResult(
                         PaymentData(
-                            transactionToken = options.transactionToken ?: "",
-                            miniappOrderId = options.miniappOrderId ?: "",
-                            amount = options.amount ?: 0.0,
-                            currency = options.currency ?: "",
-                            status = options.status ?: "",
-                            hostappOrderId = options.hostappOrderId ?: "",
-                            extraParams = options.extraParams
+                            transactionToken = paymentEvent.transactionToken ?: "",
+                            miniappOrderId = paymentEvent.miniappOrderId ?: "",
+                            amount = paymentEvent.amount ?: 0.0,
+                            currency = paymentEvent.currency ?: "",
+                            status = paymentEvent.status ?: "",
+                            hostappOrderId = paymentEvent.hostappOrderId ?: "",
+                            extraParams = paymentEvent.extraParams
                         )
                     )
             }
@@ -122,17 +148,6 @@ class ExpoBoxoSdkModule : Module() {
         }
         Function("logout") {
             Appboxo.logout()
-        }
-
-        // Defines a JavaScript function that always returns a Promise and whose native code
-        // is by default dispatched on the different thread than the JavaScript runtime runs on.
-        AsyncFunction("setValueAsync") { value: String ->
-            // Send an event to JavaScript.
-            sendEvent(
-                "onChange", mapOf(
-                    "value" to value
-                )
-            )
         }
     }
 }

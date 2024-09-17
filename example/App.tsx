@@ -13,6 +13,11 @@ export default function App() {
         Boxo.sendPaymentEvent(paymentData);
         Boxo.openMiniapp({appId: paymentData.appId})
     });
+    Boxo.addCustomEventListener((customEvent)=>{
+        console.log(customEvent);
+        Boxo.sendCustomEvent(customEvent);
+    });
+
   return (
     <View style={styles.container}>
 
