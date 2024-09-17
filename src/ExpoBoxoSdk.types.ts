@@ -23,31 +23,91 @@ export type CustomEventData = {
 
 export type LifecycleData = {
   appId: string;
+  /**
+   * onLaunch -  Called when the miniapp will launch with Appboxo.open(...)
+   * onResume -  Called when the miniapp will start interacting with the user
+   * onPause -  Called when the miniapp loses foreground state
+   * onClose -  Called when clicked close button in miniapp or when destroyed miniapp page
+   * onError -  Called when miniapp fails to launch due to internet connection issues
+   * onUserInteraction -  Called whenever touch event is dispatched to the miniapp page.
+   */
   lifecycle: string;
   error?: string
 };
 
 export type ConfigOptions = {
+  /**
+   * your client id from dashboard
+   */
   clientId: string;
+  /**
+   * hostapp userId, will be used for the Consent Management
+   */
   userId?: string;
+  /**
+   * language value will be passed to the miniapp
+   */
   language?: string;
-  sandboxMode?: bool;
-  multitaskMode?: bool;
-  theme?: 'light'|'dark'|'system';
-  isDebug?: bool;
-  showPermissionsPage?: bool;
-  showClearCache?: bool;
+  /**
+   * switch to sandbox mode
+   */
+  sandboxMode?: boolean;
+  /**
+   * Each miniapp appears as a task in the Recents screen.
+   * !It works only on android devices.
+   */
+  multitaskMode?: boolean;
+  /**
+   * theme for splash screen and other native components used inside miniapp.
+   */
+  theme?: 'light' | 'dark' | 'system';
+  /**
+   * enables webview debugging
+   */
+  isDebug?: boolean;
+  /**
+   * use it to hide "Settings" from Miniapp menu
+   */
+  showPermissionsPage?: boolean;
+  /**
+   * use it to hide "Clear cache" from Miniapp menu
+   */
+  showClearCache?: boolean;
 };
 
 export type MiniappOptions = {
+  /**
+   * miniapp id
+   */
   appId: string;
+  /**
+   * (optional) data as Map that is sent to miniapp
+   */
   data?: Record<string, any>;
+  /**
+   * (optional) miniapp theme "dark" | "light" (by default is system theme)
+   */
   theme?: string;
+  /**
+   * (optional) extra query params to append to miniapp URL (like: http://miniapp-url.com/?param=test)
+   */
   extraUrlParams?: Record<string, string>;
-  urlSuffix?:string;
+  /**
+   * (optional) suffix to append to miniapp URL (like: http://miniapp-url.com/?param=test)
+   */
+  urlSuffix?: string;
+  /**
+   * (optional) provide colors to miniapp if miniapp supports
+   */
   colors?: Record<string, string>;
-  enableSplash?: bool;
-  saveState?: bool;
+  /**
+   * (optional) use to skip miniapp splash screen
+   */
+  enableSplash?: boolean;
+  /**
+   * (optional) use to save state on close miniapp
+   */
+  saveState?: boolean;
 };
 
 export type MiniappListResult = {
