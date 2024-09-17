@@ -24,6 +24,10 @@ export default function App() {
     Boxo.addMiniappLifecycleListener((lifecycleData)=>{
         console.log(lifecycleData);
     });
+    Boxo.addMiniappListListener((result)=>{
+        console.log(result.miniapps);
+    });
+    Boxo.getMiniapps();
   return (
     <View style={styles.container}>
 

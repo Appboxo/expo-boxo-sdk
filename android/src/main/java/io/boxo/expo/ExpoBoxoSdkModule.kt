@@ -2,10 +2,12 @@ package io.boxo.expo
 
 import android.os.Handler
 import android.os.Looper
+import com.appboxo.data.models.MiniappData
 import com.appboxo.js.params.CustomEvent
 import com.appboxo.js.params.PaymentData
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
+import expo.modules.kotlin.Promise
 import com.appboxo.sdk.*
 
 class ExpoBoxoSdkModule : Module() {
@@ -16,7 +18,7 @@ class ExpoBoxoSdkModule : Module() {
 
         handler = Handler(Looper.getMainLooper())
 
-        Events("customEvent", "paymentEvent", "miniappLifecycle", "onAuth")
+        Events("customEvent", "paymentEvent", "miniappLifecycle", "onAuth", "miniappList")
 
         Function("setConfig") { options: ConfigOptions ->
             val globalTheme: Config.Theme = when (options.theme) {
@@ -201,8 +203,29 @@ class ExpoBoxoSdkModule : Module() {
         Function("hideMiniapps") {
             Appboxo.hideMiniapps()
         }
+
         Function("logout") {
             Appboxo.logout()
+        }
+
+        Function("getMiniapps") {
+            Appboxo.getMiniapps(object : MiniappListCallback {
+                override fun onFailure(e: Exception) {
+                    sendEvent("miniappList", mapOf("error" to e.toString()))
+                }
+
+                override fun onSuccess(miniapps: List<MiniappData>) {
+                    sendEvent("miniappList", mapOf("miniapps" to miniapps.map {
+                        mapOf(
+                            "name" to it.name,
+                            "description" to it.description,
+                            "appId" to it.appId,
+                            "logo" to it.logo,
+                            "category" to it.category,
+                        )
+                    }))
+                }
+            })
         }
     }
 }

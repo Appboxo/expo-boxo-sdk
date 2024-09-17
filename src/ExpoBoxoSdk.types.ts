@@ -50,3 +50,16 @@ export type MiniappOptions = {
   saveState?: bool;
 };
 
+export type MiniappListResult = {
+  miniapps?: Array<MiniappData>;
+  error?: string;
+}
+
+export type MiniappData = {
+  appId: string;
+  name: string;
+  category: string;
+  description: string;
+  logo: string;
+}
+

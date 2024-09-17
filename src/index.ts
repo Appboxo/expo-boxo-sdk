@@ -1,7 +1,7 @@
 import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-core';
 
 import ExpoBoxoSdkModule from './ExpoBoxoSdkModule';
-import { LifecycleData, CustomEventData, PaymentData, AuthEventPayload, ConfigOptions, MiniappOptions } from './ExpoBoxoSdk.types';
+import { MiniappListResult, MiniappData, LifecycleData, CustomEventData, PaymentData, AuthEventPayload, ConfigOptions, MiniappOptions } from './ExpoBoxoSdk.types';
 
 export function setConfig(options: ConfigOptions) {
   ExpoBoxoSdkModule.setConfig(options);
@@ -35,6 +35,10 @@ export function closeMiniapp(appId:string) {
   ExpoBoxoSdkModule.closeMiniapp(appId);
 }
 
+export function getMiniapps() {
+  ExpoBoxoSdkModule.getMiniapps();
+}
+
 const emitter = new EventEmitter(ExpoBoxoSdkModule ?? NativeModulesProxy.ExpoBoxoSdk);
 
 export function addAuthListener(listener: (event: AuthEventPayload) => void): Subscription {
@@ -53,4 +57,8 @@ export function addMiniappLifecycleListener(listener: (lifecycleData: LifecycleD
   return emitter.addListener<LifecycleData>('miniappLifecycle', listener);
 }
 
-export { LifecycleData, CustomEventData, PaymentData, AuthEventPayload, ConfigOptions, MiniappOptions };
+export function addMiniappListListener(listener: (result: MiniappListResult ) => void): Subscription {
+  return emitter.addListener<MiniappListResult>('miniappList', listener);
+}
+
+export { MiniappListResult, MiniappData, LifecycleData, CustomEventData, PaymentData, AuthEventPayload, ConfigOptions, MiniappOptions };
