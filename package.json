@@ -1,7 +1,7 @@
 {
   "name": "expo-boxo-sdk",
   "version": "0.1.0",
-  "description": "Boxo SDK wrapper for Expo ",
+  "description": "Expo wrapper over Appboxo SDK for IOS and Android.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -19,7 +19,7 @@
     "react-native",
     "expo",
     "expo-boxo-sdk",
-    "ExpoBoxoSdk"
+    "ExpoBoxoSDK"
   ],
   "repository": "https://github.com/Appboxo/expo-boxo-sdk",
   "bugs": {

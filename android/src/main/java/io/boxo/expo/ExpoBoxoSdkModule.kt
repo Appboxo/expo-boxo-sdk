@@ -70,7 +70,62 @@ class ExpoBoxoSdkModule : Module() {
                 .setAuthListener { _, miniapp ->
                     sendEvent("onAuth", mapOf("appId" to miniapp.appId))
                 }
-//                .setLifecycleListener(this)
+                .setLifecycleListener(object : Miniapp.LifecycleListener {
+                    override fun onClose(miniapp: Miniapp) {
+                        sendEvent(
+                            "miniappLifecycle", mapOf(
+                                "appId" to miniapp.appId,
+                                "lifecycle" to "onClose"
+                            )
+                        )
+                    }
+
+                    override fun onError(miniapp: Miniapp, message: String) {
+                        sendEvent(
+                            "miniappLifecycle", mapOf(
+                                "appId" to miniapp.appId,
+                                "lifecycle" to "onError",
+                                "error" to message
+                            )
+                        )
+                    }
+
+                    override fun onLaunch(miniapp: Miniapp) {
+                        sendEvent(
+                            "miniappLifecycle", mapOf(
+                                "appId" to miniapp.appId,
+                                "lifecycle" to "onLaunch"
+                            )
+                        )
+                    }
+
+                    override fun onPause(miniapp: Miniapp) {
+                        sendEvent(
+                            "miniappLifecycle", mapOf(
+                                "appId" to miniapp.appId,
+                                "lifecycle" to "onPause"
+                            )
+                        )
+                    }
+
+                    override fun onResume(miniapp: Miniapp) {
+                        sendEvent(
+                            "miniappLifecycle", mapOf(
+                                "appId" to miniapp.appId,
+                                "lifecycle" to "onResume"
+                            )
+                        )
+                    }
+
+                    override fun onUserInteraction(miniapp: Miniapp) {
+                        sendEvent(
+                            "miniappLifecycle", mapOf(
+                                "appId" to miniapp.appId,
+                                "lifecycle" to "onUserInteraction"
+                            )
+                        )
+                    }
+                })
             if (options.data != null) miniapp.setData(options.data)
             val configBuilder = MiniappConfig.Builder()
             if (options.theme != null) {

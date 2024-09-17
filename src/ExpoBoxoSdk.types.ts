@@ -21,6 +21,12 @@ export type CustomEventData = {
   payload?: Record<string, any>;
 };
 
+export type LifecycleData = {
+  appId: string;
+  lifecycle: string;
+  error?: string
+};
+
 export type ConfigOptions = {
   clientId: string;
   userId?: string;

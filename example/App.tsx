@@ -2,10 +2,14 @@ import { StyleSheet, Text, View, Pressable } from 'react-native';
 
 import * as Boxo from 'expo-boxo-sdk';
 
+const clientId = '';
+const authCode = '';
+const appId = '';
+
 export default function App() {
-    Boxo.setConfig({clientId:'602248', multitaskMode: true});
+    Boxo.setConfig({clientId: clientId, multitaskMode: true});
     Boxo.addAuthListener((authEvent)=>{
-        Boxo.setAuthCode(authEvent.appId, 'tNCYV57xV03Ds3ar63oQtddQxUxCRY')
+        Boxo.setAuthCode(authEvent.appId, authCode)
     });
     Boxo.addPaymentEventListener((paymentData)=>{
         Boxo.hideMiniapps();
@@ -17,13 +21,15 @@ export default function App() {
         console.log(customEvent);
         Boxo.sendCustomEvent(customEvent);
     });
-
+    Boxo.addMiniappLifecycleListener((lifecycleData)=>{
+        console.log(lifecycleData);
+    });
   return (
     <View style={styles.container}>
 
       <View style={styles.buttonContainer}>
                  <Pressable style={styles.button} onPress={() =>
-                  Boxo.openMiniapp({appId:'app16973'})
+                  Boxo.openMiniapp({appId:appId})
                  }>
                    <Text style={styles.buttonLabel}>Open Miniapp</Text>
                  </Pressable>
