@@ -1,44 +1,229 @@
 import ExpoModulesCore
+import AppBoxoSDK
 
 public class ExpoBoxoSdkModule: Module {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
-  public func definition() -> ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoBoxoSdk')` in JavaScript.
-    Name("ExpoBoxoSdk")
-
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
+    
+    public func definition() -> ModuleDefinition {
+        Name("ExpoBoxoSdk")
+        
+        Events("customEvent", "paymentEvent", "miniappLifecycle", "onAuth", "miniappList")
+        
+        Function("setConfig") { (options : ConfigOptions) in
+            var globalTheme : Theme = .System
+            switch (options.theme) {
+            case "dark":
+                globalTheme = .Dark
+            case "light":
+                globalTheme = .Light
+            default:
+                globalTheme = .System
+            }
+            
+            let config = Config(clientId: options.clientId, theme: globalTheme)
+            config.setUserId(id: options.userId)
+            config.language = options.language
+            config.sandboxMode = options.sandboxMode
+            config.permissionsPage = options.showPermissionsPage
+            config.showClearCache = options.showClearCache
+            
+            Appboxo.shared.setConfig(config: config)
+        }
+        
+        Function("openMiniapp") { (options : MiniappOptions) in
+            let miniApp = Appboxo.shared.getMiniapp(appId: options.appId)
+            miniApp.setData(data: options.data)
+            miniApp.delegate = self
+            
+            let miniappConfig = MiniappConfig()
+            miniappConfig.saveState = options.saveState
+            miniappConfig.enableSplash(isSplashEnabled: options.enableSplash)
+            miniappConfig.setExtraParams(extraParams: options.extraUrlParams)
+            
+            if let theme = options.theme {
+                switch theme {
+                case "dark":
+                    miniappConfig.setTheme(theme: .Dark)
+                case "light":
+                    miniappConfig.setTheme(theme: .Light)
+                case "system":
+                    miniappConfig.setTheme(theme: .System)
+                default:
+                    break
+                }
+            }
+            
+            if let colors = options.colors {
+                miniappConfig.setColor(color: MiniappColor(primary: colors["primary_color"] ?? "", secondary: colors["secondary_color"] ?? "", tertiary: colors["tertiary_color"] ?? ""))
+            }
+            
+            miniApp.setConfig(config: miniappConfig)
+            DispatchQueue.main.async {
+                miniApp.open(viewController: UIApplication.shared.delegate!.window!!.rootViewController!)
+            }
+        }
+        
+        Function("setAuthCode") { (appId : String, authCode: String) in
+            DispatchQueue.main.async {
+                Appboxo.shared.getMiniapp(appId: appId).setAuthCode(authCode: authCode)
+            }
+        }
+        
+        Function("sendCustomEvent") { (customEvent : CustomEventData) in
+            let event = CustomEvent()
+            event.requestId = customEvent.requestId ?? 0
+            event.type = customEvent.type ?? ""
+            event.errorType = customEvent.errorType ?? ""
+            event.payload = customEvent.payload
+            
+            DispatchQueue.main.async {
+                Appboxo.shared.getMiniapp(appId: customEvent.appId).sendCustomEvent(customEvent: event)
+            }
+        }
+        
+        Function("sendPaymentEvent") { (paymentEvent : PaymentEventData) in
+            let paymentData = PaymentData()
+            paymentData.transactionToken = paymentEvent.transactionToken ?? ""
+            paymentData.miniappOrderId = paymentEvent.miniappOrderId ?? ""
+            paymentData.amount = paymentEvent.amount ?? 0.0
+            paymentData.currency = paymentEvent.currency ?? ""
+            paymentData.status = paymentEvent.status ?? ""
+            paymentData.hostappOrderId = paymentEvent.hostappOrderId ?? ""
+            paymentData.extraParams = paymentEvent.extraParams
+            
+            DispatchQueue.main.async {
+                Appboxo.shared.getMiniapp(appId: paymentEvent.appId).sendPaymentEvent(paymentData: paymentData)
+            }
+        }
+        
+        Function("closeMiniapp") { (appId : String) in
+            if let miniapp = Appboxo.shared.getExistingMiniapp(appId: appId) {
+                DispatchQueue.main.async {
+                    miniapp.close()
+                }
+            }
+        }
+        
+        Function("hideMiniapps") {
+            DispatchQueue.main.async {
+                Appboxo.shared.hideMiniapps()
+            }
+        }
+        
+        Function("logout") {
+            DispatchQueue.main.async {
+                Appboxo.shared.logout()
+            }
+        }
+        
+        Function("getMiniapps") {
+            Appboxo.shared.getMiniapps { miniapps, error in
+                if let error = error {
+                    self.sendEvent("miniappList", ["error" : error])
+                } else {
+                    self.sendEvent("miniappList", ["miniapps" : miniapps.map { miniappData in
+                        return [
+                            "appId" : miniappData.appId,
+                            "name" : miniappData.name,
+                            "category" : miniappData.category,
+                            "logo" : miniappData.logo,
+                            "description" : miniappData.longDescription
+                        ]
+                    }])
+                }
+            }
+        }
     }
+}
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
+extension ExpoBoxoSdkModule : MiniappDelegate {
+    public func didReceivePaymentEvent(miniapp: Miniapp, paymentData: PaymentData) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "transactionToken" : paymentData.transactionToken,
+            "miniappOrderId" : paymentData.miniappOrderId,
+            "amount" : paymentData.amount,
+            "currency" : paymentData.currency,
+            "status" : paymentData.status,
+            "hostappOrderId" : paymentData.hostappOrderId,
+            "extraParams" : paymentData.extraParams ?? [String : Any]()
+        ] as [String: Any]
+        
+        sendEvent("paymentEvent", dict)
     }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
-    View(ExpoBoxoSdkView.self) {
-      // Defines a setter for the `name` prop.
-      Prop("name") { (view: ExpoBoxoSdkView, prop: String) in
-        print(prop)
-      }
+    
+    public func didReceiveCustomEvent(miniapp: Miniapp, customEvent: CustomEvent) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "requestId" : customEvent.requestId,
+            "type" : customEvent.type,
+            "errorType" : customEvent.errorType,
+            "payload" : customEvent.payload ?? [String : Any]()
+        ] as [String: Any]
+        
+        sendEvent("customEvent", dict)
     }
-  }
+    
+    public func onLaunch(miniapp: Miniapp) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "lifecycle" : "onLaunch"
+        ]
+        
+        sendEvent("miniappLifecycle", dict)
+    }
+    
+    public func onResume(miniapp: Miniapp) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "lifecycle" : "onResume"
+        ]
+        
+        sendEvent("miniappLifecycle", dict)
+    }
+    
+    public func onPause(miniapp: Miniapp) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "lifecycle" : "onPause"
+        ]
+        
+        sendEvent("miniappLifecycle", dict)
+    }
+    
+    public func onClose(miniapp: Miniapp) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "lifecycle" : "onClose"
+        ]
+        
+        sendEvent("miniappLifecycle", dict)
+    }
+    
+    public func onError(miniapp: Miniapp, message: String) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "lifecycle" : "onError",
+            "error" : message
+        ]
+        
+        sendEvent("miniappLifecycle", dict)
+    }
+    
+    public func onUserInteraction(miniapp: Miniapp) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "lifecycle" : "onUserInteraction"
+        ]
+        
+        sendEvent("miniappLifecycle", dict)
+    }
+    
+    public func onAuth(miniapp: Miniapp) {
+        let dict = [
+            "appId" : miniapp.appId,
+            "lifecycle" : "onAuth"
+        ]
+        
+        sendEvent("onAuth", dict)
+    }
 }
