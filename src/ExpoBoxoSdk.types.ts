@@ -73,6 +73,11 @@ export type ConfigOptions = {
    * use it to hide "Clear cache" from Miniapp menu
    */
   showClearCache?: boolean;
+
+  /**
+   * use it to hide "About Page" from Miniapp menu
+   */
+  showAboutPage?: boolean;
 };
 
 export type MiniappOptions = {

@@ -30,4 +30,7 @@ class ConfigOptions : Record {
 
     @Field
     val showClearCache: Boolean = true
+
+    @Field
+    val showAboutPage: Boolean = true
 }

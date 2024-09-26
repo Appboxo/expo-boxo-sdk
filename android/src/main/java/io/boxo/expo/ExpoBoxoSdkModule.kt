@@ -37,6 +37,7 @@ class ExpoBoxoSdkModule : Module() {
                         .setLanguage(options.language)
                         .permissionsPage(options.showPermissionsPage)
                         .showClearCache(options.showClearCache)
+                        .showAboutPage(options.showAboutPage)
                         .debug(options.isDebug)
                         .build()
                 )
