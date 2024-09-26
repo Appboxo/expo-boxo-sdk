@@ -34,4 +34,7 @@ struct ConfigOptions: Record {
     
     @Field
     var showClearCache: Bool = true
+    
+    @Field
+    var showAboutPage: Bool = true
 }

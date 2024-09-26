@@ -25,6 +25,7 @@ public class ExpoBoxoSdkModule: Module {
             config.sandboxMode = options.sandboxMode
             config.permissionsPage = options.showPermissionsPage
             config.showClearCache = options.showClearCache
+            config.showAboutPage = options.showAboutPage
             
             Appboxo.shared.setConfig(config: config)
         }
@@ -38,6 +39,7 @@ public class ExpoBoxoSdkModule: Module {
             miniappConfig.saveState = options.saveState
             miniappConfig.enableSplash(isSplashEnabled: options.enableSplash)
             miniappConfig.setExtraParams(extraParams: options.extraUrlParams)
+            miniappConfig.urlSuffix = options.urlSuffix ?? ""
             
             if let theme = options.theme {
                 switch theme {
