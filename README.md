@@ -8,6 +8,17 @@ Expo wrapper over Appboxo SDK for IOS and Android.
 npm install @appboxo/expo-boxo-sdk
 ```
 
+## Configuration in app.json/app.config.js
+```json
+{
+  "expo": {
+    "plugins": [
+      ["@appboxo/expo-boxo-sdk"]
+    ]
+  }
+}
+```
+
 ## API
 
 * [`setConfig(...)`](#setconfig)

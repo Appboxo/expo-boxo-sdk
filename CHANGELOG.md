@@ -1,4 +1,8 @@
 # Changelog
+## [0.3.0]
+- add new menu style (style_2)
+- add progressbar for share event
+
 ## [0.2.0]
 - add new menu style 
 
