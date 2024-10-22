@@ -1,4 +1,9 @@
 # Changelog
+## [0.4.0]
+- clear cache with reload
+- add support eSim flag (android)
+- add maintenance mode
+
 ## [0.3.0]
 - add new menu style (style_2)
 - add progressbar for share event
