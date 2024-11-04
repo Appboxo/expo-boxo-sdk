@@ -1,4 +1,8 @@
 # Changelog
+## [0.4.1]
+- no internet connection page
+- fix crash on auth
+
 ## [0.4.0]
 - clear cache with reload
 - add support eSim flag (android)
