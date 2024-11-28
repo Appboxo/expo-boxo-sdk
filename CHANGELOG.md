@@ -1,4 +1,8 @@
 # Changelog
+## [0.4.2]
+- add new menu style
+- fix open_miniapp_duration on reload
+
 ## [0.4.1]
 - no internet connection page
 - fix crash on auth
