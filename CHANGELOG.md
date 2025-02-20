@@ -1,4 +1,9 @@
 # Changelog
+## [0.5.0]
+- Added list of user fields to consent screen
+- LTR/RTL support by language
+- Some improvements in native sdk
+
 ## [0.4.2]
 - add new menu style
 - fix open_miniapp_duration on reload

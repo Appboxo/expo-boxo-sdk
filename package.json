@@ -1,6 +1,6 @@
 {
   "name": "@appboxo/expo-boxo-sdk",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Expo wrapper over Appboxo SDK for IOS and Android.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
