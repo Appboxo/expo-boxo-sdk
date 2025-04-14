@@ -1,4 +1,11 @@
 # Changelog
+## [0.6.0]
+- add new menu style
+- Added list of user fields to consent screen
+- add native pull to refresh
+- add camera option to file picker
+- other improvements in native sdk
+
 ## [0.5.0]
 - Added list of user fields to consent screen
 - LTR/RTL support by language

@@ -2,13 +2,13 @@ package io.boxo.expo
 
 import android.os.Handler
 import android.os.Looper
-import com.appboxo.data.models.MiniappData
-import com.appboxo.js.params.CustomEvent
-import com.appboxo.js.params.PaymentData
+import io.boxo.data.models.MiniappData
+import io.boxo.js.params.CustomEvent
+import io.boxo.js.params.PaymentData
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import expo.modules.kotlin.Promise
-import com.appboxo.sdk.*
+import io.boxo.sdk.*
 
 class ExpoBoxoSdkModule : Module() {
     private var handler: Handler? = null
@@ -26,7 +26,7 @@ class ExpoBoxoSdkModule : Module() {
                 "dark" -> Config.Theme.DARK
                 else -> Config.Theme.SYSTEM
             }
-            Appboxo.init(appContext.activityProvider!!.currentActivity.application)
+            Boxo.init(appContext.activityProvider!!.currentActivity.application)
                 .setConfig(
                     Config.Builder()
                         .setClientId(options.clientId)
@@ -44,7 +44,7 @@ class ExpoBoxoSdkModule : Module() {
         }
 
         Function("openMiniapp") { options: MiniappOptions ->
-            val miniapp: Miniapp = Appboxo.getMiniapp(options.appId)
+            val miniapp: Miniapp = Boxo.getMiniapp(options.appId)
                 .setCustomEventListener { _, miniapp, customEvent ->
                     sendEvent(
                         "customEvent", mapOf(
@@ -162,13 +162,13 @@ class ExpoBoxoSdkModule : Module() {
         }
 
         Function("setAuthCode") { appId: String, authCode: String ->
-            Appboxo.getMiniapp(appId)
+            Boxo.getMiniapp(appId)
                 .setAuthCode(authCode)
         }
 
         Function("sendCustomEvent") { customEvent: CustomEventData ->
             handler?.post {
-                Appboxo.getMiniapp(customEvent.appId)
+                Boxo.getMiniapp(customEvent.appId)
                     .sendEvent(
                         CustomEvent(
                             requestId = customEvent.requestId,
@@ -182,7 +182,7 @@ class ExpoBoxoSdkModule : Module() {
 
         Function("sendPaymentEvent") { paymentEvent: PaymentEventData ->
             handler?.post {
-                Appboxo.getMiniapp(paymentEvent.appId)
+                Boxo.getMiniapp(paymentEvent.appId)
                     .sendPaymentResult(
                         PaymentData(
                             transactionToken = paymentEvent.transactionToken ?: "",
@@ -198,19 +198,19 @@ class ExpoBoxoSdkModule : Module() {
         }
 
         Function("closeMiniapp") { appId: String ->
-            Appboxo.getExistingMiniapp(appId)?.close()
+            Boxo.getExistingMiniapp(appId)?.close()
         }
 
         Function("hideMiniapps") {
-            Appboxo.hideMiniapps()
+            Boxo.hideMiniapps()
         }
 
         Function("logout") {
-            Appboxo.logout()
+            Boxo.logout()
         }
 
         Function("getMiniapps") {
-            Appboxo.getMiniapps(object : MiniappListCallback {
+            Boxo.getMiniapps(object : MiniappListCallback {
                 override fun onFailure(e: Exception) {
                     sendEvent("miniappList", mapOf("error" to e.toString()))
                 }

@@ -47,7 +47,7 @@ export function logout() {
 
 /**
  * Miniapp opens on a native screen. To show payment processing page need to hide miniapp screen.
- * To use this function need to enable 'multitaskMode: true' in Appboxo.setConfigs()
+ * To use this function need to enable 'multitaskMode: true' in Boxo.setConfig()
  */
 export function hideMiniapps() {
   ExpoBoxoSdkModule.hideMiniapps();
