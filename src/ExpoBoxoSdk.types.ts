@@ -24,7 +24,7 @@ export type CustomEventData = {
 export type LifecycleData = {
   appId: string;
   /**
-   * onLaunch -  Called when the miniapp will launch with Appboxo.open(...)
+   * onLaunch -  Called when the miniapp will launch with Boxo.open(...)
    * onResume -  Called when the miniapp will start interacting with the user
    * onPause -  Called when the miniapp loses foreground state
    * onClose -  Called when clicked close button in miniapp or when destroyed miniapp page
@@ -90,9 +90,9 @@ export type MiniappOptions = {
    */
   data?: Record<string, any>;
   /**
-   * (optional) miniapp theme "dark" | "light" (by default is system theme)
+   * (optional) miniapp theme 'dark' | 'light' | 'system'  (by default is system theme)
    */
-  theme?: string;
+  theme?: 'light' | 'dark' | 'system';
   /**
    * (optional) extra query params to append to miniapp URL (like: http://miniapp-url.com/?param=test)
    */
@@ -113,6 +113,10 @@ export type MiniappOptions = {
    * (optional) use to save state on close miniapp
    */
   saveState?: boolean;
+  /**
+   * (optional) use to change launch animation for miniapp.
+   */
+  pageAnimation?: 'BOTTOM_TO_TOP' | 'TOP_TO_BOTTOM' | 'LEFT_TO_RIGHT' | 'RIGHT_TO_LEFT' | 'FADE_IN';
 };
 
 export type MiniappListResult = {

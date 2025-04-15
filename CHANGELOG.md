@@ -1,4 +1,7 @@
 # Changelog
+## [0.6.1]
+- add miniapp page animation
+
 ## [0.6.0]
 - add new menu style
 - Added list of user fields to consent screen

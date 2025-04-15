@@ -3,6 +3,7 @@ package io.boxo.expo
 import android.os.Handler
 import android.os.Looper
 import io.boxo.data.models.MiniappData
+import io.boxo.data.models.PageAnimation
 import io.boxo.js.params.CustomEvent
 import io.boxo.js.params.PaymentData
 import expo.modules.kotlin.modules.Module
@@ -155,6 +156,9 @@ class ExpoBoxoSdkModule : Module() {
                     colors["tertiaryColor"] ?: "",
                 )
             }
+            val pageAnimation = runCatching { PageAnimation.valueOf(options.pageAnimation ?: "") }
+                    .getOrDefault(PageAnimation.BOTTOM_TO_TOP)
+            configBuilder.pageAnimation(pageAnimation)
             configBuilder.enableSplash(options.enableSplash)
             configBuilder.saveState(options.saveState)
             miniapp.setConfig(configBuilder.build())

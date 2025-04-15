@@ -27,4 +27,7 @@ class MiniappOptions : Record {
 
     @Field
     val saveState: Boolean = true
+
+    @Field
+    val pageAnimation: String? = null
 }
