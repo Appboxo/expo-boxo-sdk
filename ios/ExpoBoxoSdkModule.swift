@@ -1,5 +1,5 @@
 import ExpoModulesCore
-import AppBoxoSDK
+import BoxoSDK
 
 public class ExpoBoxoSdkModule: Module {
     
@@ -27,11 +27,11 @@ public class ExpoBoxoSdkModule: Module {
             config.showClearCache = options.showClearCache
             config.showAboutPage = options.showAboutPage
             
-            Appboxo.shared.setConfig(config: config)
+            Boxo.shared.setConfig(config: config)
         }
         
         Function("openMiniapp") { (options : MiniappOptions) in
-            let miniApp = Appboxo.shared.getMiniapp(appId: options.appId)
+            let miniApp = Boxo.shared.getMiniapp(appId: options.appId)
             miniApp.setData(data: options.data)
             miniApp.delegate = self
             
@@ -41,6 +41,21 @@ public class ExpoBoxoSdkModule: Module {
             miniappConfig.setExtraParams(extraParams: options.extraUrlParams)
             miniappConfig.urlSuffix = options.urlSuffix ?? ""
             
+            switch options.pageAnimation {
+                case "BOTTOM_TO_TOP":
+                    miniappConfig.pageAnimation = .BOTTOM_TO_TOP
+                case "TOP_TO_BOTTOM":
+                    miniappConfig.pageAnimation = .TOP_TO_BOTTOM
+                case "LEFT_TO_RIGHT":
+                    miniappConfig.pageAnimation = .LEFT_TO_RIGHT
+                case "RIGHT_TO_LEFT":
+                    miniappConfig.pageAnimation = .RIGHT_TO_LEFT
+                case "FADE_IN":
+                    miniappConfig.pageAnimation = .FADE_IN
+                default:
+                    miniappConfig.pageAnimation = .BOTTOM_TO_TOP
+            }
+
             if let theme = options.theme {
                 switch theme {
                 case "dark":
@@ -66,7 +81,7 @@ public class ExpoBoxoSdkModule: Module {
         
         Function("setAuthCode") { (appId : String, authCode: String) in
             DispatchQueue.main.async {
-                Appboxo.shared.getMiniapp(appId: appId).setAuthCode(authCode: authCode)
+                Boxo.shared.getMiniapp(appId: appId).setAuthCode(authCode: authCode)
             }
         }
         
@@ -78,7 +93,7 @@ public class ExpoBoxoSdkModule: Module {
             event.payload = customEvent.payload
             
             DispatchQueue.main.async {
-                Appboxo.shared.getMiniapp(appId: customEvent.appId).sendCustomEvent(customEvent: event)
+                Boxo.shared.getMiniapp(appId: customEvent.appId).sendCustomEvent(customEvent: event)
             }
         }
         
@@ -93,12 +108,12 @@ public class ExpoBoxoSdkModule: Module {
             paymentData.extraParams = paymentEvent.extraParams
             
             DispatchQueue.main.async {
-                Appboxo.shared.getMiniapp(appId: paymentEvent.appId).sendPaymentEvent(paymentData: paymentData)
+                Boxo.shared.getMiniapp(appId: paymentEvent.appId).sendPaymentEvent(paymentData: paymentData)
             }
         }
         
         Function("closeMiniapp") { (appId : String) in
-            if let miniapp = Appboxo.shared.getExistingMiniapp(appId: appId) {
+            if let miniapp = Boxo.shared.getExistingMiniapp(appId: appId) {
                 DispatchQueue.main.async {
                     miniapp.close()
                 }
@@ -107,18 +122,18 @@ public class ExpoBoxoSdkModule: Module {
         
         Function("hideMiniapps") {
             DispatchQueue.main.async {
-                Appboxo.shared.hideMiniapps()
+                Boxo.shared.hideMiniapps()
             }
         }
         
         Function("logout") {
             DispatchQueue.main.async {
-                Appboxo.shared.logout()
+                Boxo.shared.logout()
             }
         }
         
         Function("getMiniapps") {
-            Appboxo.shared.getMiniapps { miniapps, error in
+            Boxo.shared.getMiniapps { miniapps, error in
                 if let error = error {
                     self.sendEvent("miniappList", ["error" : error])
                 } else {

@@ -31,4 +31,7 @@ struct MiniappOptions: Record {
     
     @Field
     var saveState: Bool = true
+
+    @Field
+    var pageAnimation: String?
 }
