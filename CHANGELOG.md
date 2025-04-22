@@ -1,4 +1,7 @@
 # Changelog
+## [0.6.2]
+- Some improvements in native sdk
+
 ## [0.6.1]
 - add miniapp page animation
 
