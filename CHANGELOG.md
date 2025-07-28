@@ -1,4 +1,7 @@
 # Changelog
+## [0.6.3]
+- add app.plugin.js
+
 ## [0.6.2]
 - Some improvements in native sdk
 

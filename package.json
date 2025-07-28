@@ -1,7 +1,7 @@
 {
   "name": "@appboxo/expo-boxo-sdk",
-  "version": "0.6.2",
-  "description": "Expo wrapper over Appboxo SDK for IOS and Android.",
+  "version": "0.6.3",
+  "description": "Expo wrapper over Boxo SDK for IOS and Android.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -28,11 +28,14 @@
   "author": "Boxo <support@appboxo.com> (https://github.com/Appboxo)",
   "license": "MIT",
   "homepage": "https://github.com/Appboxo/expo-boxo-sdk#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@expo/config-plugins": "^10.1.2"
+  },
   "devDependencies": {
     "@types/react": "^18.0.25",
     "expo-module-scripts": "^3.5.2",
-    "expo-modules-core": "^1.12.20"
+    "expo-modules-core": "^1.12.20",
+    "tsx": "^4.20.3"
   },
   "peerDependencies": {
     "expo": "*",
