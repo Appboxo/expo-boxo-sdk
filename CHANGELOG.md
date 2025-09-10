@@ -1,4 +1,7 @@
 # Changelog
+## [0.7.0]
+- bump native sdk versions
+
 ## [0.6.3]
 - add app.plugin.js
 
