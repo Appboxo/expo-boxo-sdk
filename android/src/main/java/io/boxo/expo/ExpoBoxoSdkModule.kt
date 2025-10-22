@@ -170,6 +170,11 @@ class ExpoBoxoSdkModule : Module() {
                 .setAuthCode(authCode)
         }
 
+        Function("setAuthTokens") { appId: String, tokens: Map<String, String> ->
+            Boxo.getMiniapp(appId)
+                .setAuthTokens(tokens)
+        }
+
         Function("sendCustomEvent") { customEvent: CustomEventData ->
             handler?.post {
                 Boxo.getMiniapp(customEvent.appId)

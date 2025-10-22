@@ -13,6 +13,10 @@ export declare function openMiniapp(options: MiniappOptions): void;
  */
 export declare function setAuthCode(appId: string, authCode: string): void;
 /**
+ * get AuthTokens from hostapp backend and send it to miniapp
+ */
+export declare function setAuthTokens(appId: string, tokens: Record<string, string>): void;
+/**
  * send payment event to miniapp
  */
 export declare function sendPaymentEvent(paymentData: PaymentData): void;

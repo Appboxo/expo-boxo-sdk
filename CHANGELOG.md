@@ -1,4 +1,8 @@
 # Changelog
+## [0.8.0]
+- add setAuthTokens method
+- bump native sdk versions
+
 ## [0.7.0]
 - bump native sdk versions
 

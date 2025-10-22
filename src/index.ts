@@ -25,6 +25,13 @@ export function setAuthCode(appId: string, authCode: string) {
 }
 
 /**
+ * get AuthTokens from hostapp backend and send it to miniapp
+ */
+export function setAuthTokens(appId: string, tokens: Record<string, string>){
+  ExpoBoxoSdkModule.setAuthTokens(appId, tokens);
+}
+
+/**
  * send payment event to miniapp
  */
 export function sendPaymentEvent(paymentData: PaymentData) {
