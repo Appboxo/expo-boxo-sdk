@@ -84,6 +84,12 @@ public class ExpoBoxoSdkModule: Module {
                 Boxo.shared.getMiniapp(appId: appId).setAuthCode(authCode: authCode)
             }
         }
+
+        Function("setAuthTokens") { (appId : String, tokens: [String : Any]) in
+            DispatchQueue.main.async {
+                Boxo.shared.getMiniapp(appId: appId).setAuthTokens(tokens)
+            }
+        }
         
         Function("sendCustomEvent") { (customEvent : CustomEventData) in
             let event = CustomEvent()
