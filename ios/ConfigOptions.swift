@@ -37,4 +37,7 @@ struct ConfigOptions: Record {
     
     @Field
     var showAboutPage: Bool = true
+
+    @Field
+    var consentScreenConfig: ConsentScreenConfigOptions?
 }

@@ -1,4 +1,7 @@
 # Changelog
+## [0.9.0]
+- ios: add Consent screen config
+
 ## [0.8.0]
 - add setAuthTokens method
 - bump native sdk versions

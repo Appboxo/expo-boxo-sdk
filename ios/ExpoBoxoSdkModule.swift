@@ -27,6 +27,17 @@ public class ExpoBoxoSdkModule: Module {
             config.showClearCache = options.showClearCache
             config.showAboutPage = options.showAboutPage
             
+            if let consentConfig = options.consentScreenConfig {
+                let consentScreenConfig = ConsentScreenConfig()
+                consentScreenConfig.title = consentConfig.title ?? consentScreenConfig.title
+                consentScreenConfig.noRequiredFieldsDescription = consentConfig.noRequiredFieldsDescription ?? consentScreenConfig.noRequiredFieldsDescription
+                consentScreenConfig.requiredFieldsDescription = consentConfig.requiredFieldsDescription ?? consentScreenConfig.requiredFieldsDescription
+                consentScreenConfig.allowButtonTitle = consentConfig.allowButtonTitle ?? consentScreenConfig.allowButtonTitle
+                consentScreenConfig.cancelButtonTitle = consentConfig.cancelButtonTitle ?? consentScreenConfig.cancelButtonTitle
+                
+                config.consentScreenConfig = consentScreenConfig
+            }
+            
             Boxo.shared.setConfig(config: config)
         }
         
