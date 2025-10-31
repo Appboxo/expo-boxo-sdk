@@ -1,4 +1,7 @@
 # Changelog
+## [0.9.1]
+- ios: fix Consent screen
+
 ## [0.9.0]
 - ios: add Consent screen config
 

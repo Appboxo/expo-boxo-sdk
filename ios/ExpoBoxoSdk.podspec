@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'
-  s.dependency 'BoxoSDK', '1.19.0'
+  s.dependency 'BoxoSDK', '1.19.1'
 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
