@@ -33,4 +33,7 @@ class ConfigOptions : Record {
 
     @Field
     val showAboutPage: Boolean = true
+
+    @Field
+    val consentScreenConfig: ConsentScreenConfigOptions? = null
 }

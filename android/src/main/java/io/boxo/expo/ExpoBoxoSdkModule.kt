@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import io.boxo.data.models.MiniappData
 import io.boxo.data.models.PageAnimation
+import io.boxo.data.models.ConsentScreenConfig
 import io.boxo.js.params.CustomEvent
 import io.boxo.js.params.PaymentData
 import expo.modules.kotlin.modules.Module
@@ -27,6 +28,19 @@ class ExpoBoxoSdkModule : Module() {
                 "dark" -> Config.Theme.DARK
                 else -> Config.Theme.SYSTEM
             }
+
+            val consentScreenConfig = if (options.consentScreenConfig != null) {
+                val options = options.consentScreenConfig
+                ConsentScreenConfig(
+                    title = options.title ?: "",
+                    noRequiredFieldsDescription = options.noRequiredFieldsDescription ?: "",
+                    requiredFieldsDescription = options.requiredFieldsDescription ?: "",
+                    allowButtonTitle = options.allowButtonTitle ?: "",
+                    cancelButtonTitle = options.cancelButtonTitle ?: ""
+                )
+            } else {
+                ConsentScreenConfig()
+            }
             Boxo.init(appContext.activityProvider!!.currentActivity.application)
                 .setConfig(
                     Config.Builder()
@@ -40,6 +54,7 @@ class ExpoBoxoSdkModule : Module() {
                         .showClearCache(options.showClearCache)
                         .showAboutPage(options.showAboutPage)
                         .debug(options.isDebug)
+                        .setConsentScreenConfig(consentScreenConfig)
                         .build()
                 )
         }
@@ -157,7 +172,7 @@ class ExpoBoxoSdkModule : Module() {
                 )
             }
             val pageAnimation = runCatching { PageAnimation.valueOf(options.pageAnimation ?: "") }
-                    .getOrDefault(PageAnimation.BOTTOM_TO_TOP)
+                .getOrDefault(PageAnimation.BOTTOM_TO_TOP)
             configBuilder.pageAnimation(pageAnimation)
             configBuilder.enableSplash(options.enableSplash)
             configBuilder.saveState(options.saveState)

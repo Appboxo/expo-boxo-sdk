@@ -1,4 +1,7 @@
 # Changelog
+## [0.9.2]
+- android: add Consent screen config
+
 ## [0.9.1]
 - ios: fix Consent screen
 
