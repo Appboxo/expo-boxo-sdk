@@ -13,27 +13,30 @@ export default function App() {
 
   const [miniapps, setMiniapps] = React.useState<Array<MiniappData>>([]);
 
-  Boxo.setConfig({ clientId: clientId, multitaskMode: true });
-  Boxo.addAuthListener((authEvent) => {
-    Boxo.setAuthCode(authEvent.appId, authCode)
-  });
-  Boxo.addPaymentEventListener((paymentData) => {
-    Boxo.hideMiniapps();
-    paymentData.status = "success";
-    Boxo.sendPaymentEvent(paymentData);
-    Boxo.openMiniapp({ appId: paymentData.appId })
-  });
-  Boxo.addCustomEventListener((customEvent) => {
-    console.log(customEvent);
-    Boxo.sendCustomEvent(customEvent);
-  });
-  Boxo.addMiniappLifecycleListener((lifecycleData) => {
-    console.log(lifecycleData);
-  });
-  Boxo.addMiniappListListener((result) => {
-    setMiniapps(result.miniapps)
-  });
-  Boxo.getMiniapps();
+  React.useEffect(() => {
+    Boxo.setConfig({ clientId: clientId, multitaskMode: true});
+    Boxo.addAuthListener((authEvent) => {
+      Boxo.setAuthCode(authEvent.appId, authCode)
+    });
+    Boxo.addPaymentEventListener(async (paymentData) => {
+      Boxo.hideMiniapps();
+      paymentData.status = "success";
+      Boxo.sendPaymentEvent(paymentData);
+      Boxo.openMiniapp({ appId: paymentData.appId })
+    });
+    Boxo.addCustomEventListener((customEvent) => {
+      console.log(customEvent);
+      Boxo.sendCustomEvent(customEvent);
+    });
+    Boxo.addMiniappLifecycleListener((lifecycleData) => {
+      console.log(lifecycleData);
+    });
+    Boxo.addMiniappListListener((result) => {
+      setMiniapps(result.miniapps)
+    });
+    Boxo.getMiniapps();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.miniappTitle}>Miniapp Id</Text>
@@ -43,9 +46,9 @@ export default function App() {
         value={appIdText}
       />
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.button} onPress={() =>
-          Boxo.openMiniapp({ appId: appIdText })
-        }>
+        <Pressable style={styles.button} onPress={() => {
+          Boxo.openMiniapp({ appId: appIdText, saveState: false});
+        }}>
           <Text style={styles.buttonLabel}>Open Miniapp</Text>
         </Pressable>
       </View>
