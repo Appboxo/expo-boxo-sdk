@@ -26,7 +26,7 @@ class MiniappOptions : Record {
     val enableSplash: Boolean = true
 
     @Field
-    val saveState: Boolean = true
+    val saveState: Boolean = false
 
     @Field
     val pageAnimation: String? = null

@@ -47,7 +47,7 @@ export default function App() {
       />
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={() => {
-          Boxo.openMiniapp({ appId: appIdText, saveState: false});
+          Boxo.openMiniapp({ appId: appIdText });
         }}>
           <Text style={styles.buttonLabel}>Open Miniapp</Text>
         </Pressable>

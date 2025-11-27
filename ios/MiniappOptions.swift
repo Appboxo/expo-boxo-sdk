@@ -30,7 +30,7 @@ struct MiniappOptions: Record {
     var enableSplash: Bool = true
     
     @Field
-    var saveState: Bool = true
+    var saveState: Bool = false
 
     @Field
     var pageAnimation: String?

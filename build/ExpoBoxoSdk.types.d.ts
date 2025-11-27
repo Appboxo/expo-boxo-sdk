@@ -73,6 +73,10 @@ export type ConfigOptions = {
      * use it to hide "About Page" from Miniapp menu
      */
     showAboutPage?: boolean;
+    /**
+     * use it to customize the consent screen
+     */
+    consentScreenConfig?: ConsentScreenConfig;
 };
 export type MiniappOptions = {
     /**
@@ -122,5 +126,12 @@ export type MiniappData = {
     category: string;
     description: string;
     logo: string;
+};
+export type ConsentScreenConfig = {
+    title?: string;
+    noRequiredFieldsDescription?: string;
+    requiredFieldsDescription?: string;
+    allowButtonTitle?: string;
+    cancelButtonTitle?: string;
 };
 //# sourceMappingURL=ExpoBoxoSdk.types.d.ts.map

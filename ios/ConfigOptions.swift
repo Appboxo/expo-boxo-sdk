@@ -21,7 +21,7 @@ struct ConfigOptions: Record {
     var sandboxMode: Bool = false
     
     @Field
-    var multitaskMode: Bool = false
+    var multitaskMode: Bool = true
     
     @Field
     var theme: String = "system"

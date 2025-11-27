@@ -1,4 +1,9 @@
 # Changelog
+## [0.10.0]
+- saveState is false by default
+- add style_5 for ActionButtons
+- android: esim direct install
+
 ## [0.9.2]
 - android: add Consent screen config
 

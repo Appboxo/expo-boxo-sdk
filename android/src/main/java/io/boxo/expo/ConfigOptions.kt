@@ -17,7 +17,7 @@ class ConfigOptions : Record {
     val sandboxMode: Boolean = false
 
     @Field
-    val multitaskMode: Boolean = false
+    val multitaskMode: Boolean = true
 
     @Field
     val theme: String = "system"
