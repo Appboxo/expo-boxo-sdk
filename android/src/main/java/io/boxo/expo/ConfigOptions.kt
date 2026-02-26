@@ -36,4 +36,7 @@ class ConfigOptions : Record {
 
     @Field
     val consentScreenConfig: ConsentScreenConfigOptions? = null
+
+    @Field
+    val splashScreenOptions: SplashScreenOptions? = null
 }

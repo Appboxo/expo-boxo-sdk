@@ -82,7 +82,12 @@ export type ConfigOptions = {
   /**
    * use it to customize the consent screen
    */
-  consentScreenConfig?: ConsentScreenConfig
+  consentScreenConfig?: ConsentScreenConfig;
+
+  /**
+   * use it to customize the splash screen
+   */
+  splashScreenOptions?: SplashScreenOptions;
 };
 
 export type MiniappOptions = {
@@ -143,4 +148,13 @@ export type ConsentScreenConfig = {
   requiredFieldsDescription?: string;
   allowButtonTitle?: string;
   cancelButtonTitle?: string;
+};
+
+export type SplashScreenOptions = {
+  lightBackground: string;
+  darkBackground: string;
+  lightProgressIndicator: string;
+  lightProgressTrack: string;
+  darkProgressIndicator: string;
+  darkProgressTrack: string;
 };

@@ -2,6 +2,7 @@ package io.boxo.expo
 
 import android.os.Handler
 import android.os.Looper
+import android.graphics.Color
 import io.boxo.data.models.MiniappData
 import io.boxo.data.models.PageAnimation
 import io.boxo.data.models.ConsentScreenConfig
@@ -55,6 +56,25 @@ class ExpoBoxoSdkModule : Module() {
                         .showAboutPage(options.showAboutPage)
                         .debug(options.isDebug)
                         .setConsentScreenConfig(consentScreenConfig)
+                        .apply{
+                            if (options.splashScreenOptions != null) {
+                                val options = options.splashScreenOptions
+                                setProgressBarColors(
+                                    lightIndicator =
+                                        Color.parseColor(options.lightProgressIndicator),
+                                    lightTrack =
+                                        Color.parseColor(options.lightProgressTrack),
+                                    darkIndicator =
+                                        Color.parseColor(options.darkProgressIndicator),
+                                    darkTrack =
+                                        Color.parseColor(options.darkProgressTrack)
+                                )
+                                setSplashBackgroundColors(
+                                    light = Color.parseColor(options.lightBackground),
+                                    dark = Color.parseColor(options.darkBackground)
+                                )
+                            }
+                        }
                         .build()
                 )
         }

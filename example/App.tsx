@@ -14,7 +14,20 @@ export default function App() {
   const [miniapps, setMiniapps] = React.useState<Array<MiniappData>>([]);
 
   React.useEffect(() => {
-    Boxo.setConfig({ clientId: clientId, multitaskMode: true});
+    Boxo.setConfig(
+        {
+            clientId: clientId,
+            multitaskMode: true,
+            splashScreenOptions: {
+                lightProgressIndicator: "#000000",
+                lightProgressTrack: "#DEDEDE",
+                darkProgressIndicator: "#DEDEDE",
+                darkProgressTrack: "#000000",
+                lightBackground:"#C495FF",
+                darkBackground:"#6A22C9"
+            }
+        }
+    );
     Boxo.addAuthListener((authEvent) => {
       Boxo.setAuthCode(authEvent.appId, authCode)
     });

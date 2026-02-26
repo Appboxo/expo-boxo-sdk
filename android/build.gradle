@@ -42,7 +42,5 @@ android {
     }
 }
 dependencies {
-    implementation('io.boxo.sdk:boxo-android:1.35.0') {
-        exclude group: 'com.google.android.gms', module: 'play-services-location'
-    }
+    implementation('io.boxo.sdk:boxo-android:1.39.0')
 }
