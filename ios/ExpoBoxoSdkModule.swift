@@ -1,5 +1,6 @@
 import ExpoModulesCore
 import BoxoSDK
+import UIKit
 
 public class ExpoBoxoSdkModule: Module {
     
@@ -36,6 +37,20 @@ public class ExpoBoxoSdkModule: Module {
                 consentScreenConfig.cancelButtonTitle = consentConfig.cancelButtonTitle ?? consentScreenConfig.cancelButtonTitle
                 
                 config.consentScreenConfig = consentScreenConfig
+            }
+            
+            if let splashScreenOptions = options.splashScreenOptions {
+                if let lightBgColor = UIColor(hex: splashScreenOptions.lightBackground), let darkBgColor = UIColor(hex: splashScreenOptions.darkBackground) {
+                    config.splashBackgroundColors = SplashBackgroundColors(light: lightBgColor, dark: darkBgColor)
+                }
+
+                if 
+                    let lightProgressIndicatorColor = UIColor(hex: splashScreenOptions.lightProgressIndicator),
+                    let lightProgressTrackColor = UIColor(hex: splashScreenOptions.lightProgressTrack),
+                    let darkProgressIndicatorColor = UIColor(hex: splashScreenOptions.darkProgressIndicator),
+                    let darkProgressTrackColor = UIColor(hex: splashScreenOptions.darkProgressTrack) {
+                        config.progressBarColors = ProgressBarColors(lightIndicator: lightProgressIndicatorColor, lightTrack: lightProgressTrackColor, darkIndicator: darkProgressIndicatorColor, darkTrack: darkProgressTrackColor)
+                    }
             }
             
             Boxo.shared.setConfig(config: config)
@@ -259,5 +274,47 @@ extension ExpoBoxoSdkModule : MiniappDelegate {
         ]
         
         sendEvent("onAuth", dict)
+    }
+}
+
+extension UIColor {
+    convenience init?(hex: String) {
+        let hex = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "#", with: "")
+
+        guard let int = UInt64(hex, radix: 16) else { return nil }
+
+        switch hex.count {
+        case 6: // RRGGBB
+            self.init(
+                red: CGFloat((int >> 16) & 0xFF) / 255.0,
+                green: CGFloat((int >> 8) & 0xFF) / 255.0,
+                blue: CGFloat(int & 0xFF) / 255.0,
+                alpha: 1.0
+            )
+
+        case 8: // RRGGBBAA
+            self.init(
+                red: CGFloat((int >> 24) & 0xFF) / 255.0,
+                green: CGFloat((int >> 16) & 0xFF) / 255.0,
+                blue: CGFloat((int >> 8) & 0xFF) / 255.0,
+                alpha: CGFloat(int & 0xFF) / 255.0
+            )
+
+        case 3: // RGB (short form)
+            let r = ((int >> 8) & 0xF) * 17
+            let g = ((int >> 4) & 0xF) * 17
+            let b = (int & 0xF) * 17
+
+            self.init(
+                red: CGFloat(r) / 255.0,
+                green: CGFloat(g) / 255.0,
+                blue: CGFloat(b) / 255.0,
+                alpha: 1.0
+            )
+
+        default:
+            return nil
+        }
     }
 }

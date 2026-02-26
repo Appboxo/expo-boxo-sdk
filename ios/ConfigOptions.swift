@@ -40,4 +40,7 @@ struct ConfigOptions: Record {
 
     @Field
     var consentScreenConfig: ConsentScreenConfigOptions?
+
+    @Field
+    var splashScreenOptions: SplashScreenOptions?
 }
