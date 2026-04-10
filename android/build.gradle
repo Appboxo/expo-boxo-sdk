@@ -42,5 +42,5 @@ android {
     }
 }
 dependencies {
-    implementation('io.boxo.sdk:boxo-android:1.39.0')
+    implementation('io.boxo.sdk:boxo-android:1.39.1')
 }
