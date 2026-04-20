@@ -3,6 +3,7 @@ package io.boxo.expo
 import android.os.Handler
 import android.os.Looper
 import android.graphics.Color
+import androidx.fragment.app.FragmentActivity
 import io.boxo.data.models.MiniappData
 import io.boxo.data.models.PageAnimation
 import io.boxo.data.models.ConsentScreenConfig
@@ -48,7 +49,6 @@ class ExpoBoxoSdkModule : Module() {
                         .setClientId(options.clientId)
                         .setUserId(options.userId)
                         .sandboxMode(options.sandboxMode)
-                        .multitaskMode(options.multitaskMode)
                         .setTheme(globalTheme)
                         .setLanguage(options.language)
                         .permissionsPage(options.showPermissionsPage)
@@ -197,7 +197,7 @@ class ExpoBoxoSdkModule : Module() {
             configBuilder.enableSplash(options.enableSplash)
             configBuilder.saveState(options.saveState)
             miniapp.setConfig(configBuilder.build())
-            miniapp.open(appContext.currentActivity!!)
+            miniapp.open(appContext.currentActivity as FragmentActivity)
         }
 
         Function("setAuthCode") { appId: String, authCode: String ->

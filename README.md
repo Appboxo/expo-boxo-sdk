@@ -49,7 +49,6 @@ Set global configs
 | **`clientId`**            | <code>string</code>                        | your client id from dashboard                                                            |
 | **`userId`**              | <code>string</code>                        | hostapp userId, will be used for the Consent Management                                  |
 | **`sandboxMode`**         | <code>boolean</code>                       | switch to sandbox mode                                                                   |
-| **`multitaskMode`**       | <code>boolean</code>                       | Each miniapp appears as a task in the Recents screen. !It works only on android devices. |
 | **`theme`**               | <code>'light' \| 'dark' \| 'system'</code> | theme for splash screen and other native components used inside miniapp.                 |
 | **`isDebug`**             | <code>boolean</code>                       | enables webview debugging                                                                |
 | **`showPermissionsPage`** | <code>boolean</code>                       | use it to hide "Settings" from Miniapp menu                                              |
@@ -170,7 +169,6 @@ hideMiniapps()
 ```
 
 Miniapp opens on a native screen. To show payment processing page need to hide miniapp screen.
-To use this function need to enable 'enableMultitaskMode: true' in Appboxo.setConfigs()
 
 --------------------
 

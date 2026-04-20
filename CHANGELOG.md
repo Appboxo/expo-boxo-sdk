@@ -1,7 +1,10 @@
 # Changelog
+## [0.12.0]
+- update android native sdk
+- remove multitask mode (android)
+
 ## [0.11.1]
 - update android native sdk
-
 
 ## [0.11.0]
 - add splash screen configuration options

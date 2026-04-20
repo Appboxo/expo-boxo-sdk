@@ -17,7 +17,6 @@ export default function App() {
     Boxo.setConfig(
         {
             clientId: clientId,
-            multitaskMode: true,
             splashScreenOptions: {
                 lightProgressIndicator: "#000000",
                 lightProgressTrack: "#DEDEDE",
