@@ -42,6 +42,6 @@ android {
     }
 }
 dependencies {
-    implementation('io.boxo.sdk:boxo-android:1.40.2')
+    implementation('io.boxo.sdk:boxo-android:1.40.4')
     implementation('androidx.fragment:fragment:1.8.5')
 }

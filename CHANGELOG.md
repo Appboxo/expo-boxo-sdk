@@ -1,4 +1,7 @@
 # Changelog
+## [0.12.1]
+- update android native sdk with fixes
+
 ## [0.12.0]
 - update android native sdk
 - remove multitask mode (android)
