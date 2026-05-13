@@ -36,4 +36,7 @@ class ConfigOptions : Record {
 
     @Field
     val splashScreenOptions: SplashScreenOptions? = null
+
+    @Field
+    val lottieProgressOptions: LottieProgressOptions? = null
 }
