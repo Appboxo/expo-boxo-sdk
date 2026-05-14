@@ -40,4 +40,8 @@ struct ConfigOptions: Record {
 
     @Field
     var splashScreenOptions: SplashScreenOptions?
+
+    @Field
+    var lottieProgressOptions: LottieProgressOptions?
 }
+

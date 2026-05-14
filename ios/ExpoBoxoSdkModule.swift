@@ -52,6 +52,17 @@ public class ExpoBoxoSdkModule: Module {
                         config.progressBarColors = ProgressBarColors(lightIndicator: lightProgressIndicatorColor, lightTrack: lightProgressTrackColor, darkIndicator: darkProgressIndicatorColor, darkTrack: darkProgressTrackColor)
                     }
             }
+
+            if let lottie = options.lottieProgressOptions {
+                let width = Double(lottie.width ?? 80)
+                let height = Double(lottie.height ?? 80)
+                config.progressBarLottieAssets = .init(
+                    lightAssetPath: lottie.light,
+                    darkAssetPath: lottie.dark ?? "",
+                    width: width,
+                    height: height
+                )
+            }
             
             Boxo.shared.setConfig(config: config)
         }
