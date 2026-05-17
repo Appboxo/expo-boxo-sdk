@@ -74,14 +74,6 @@ class ExpoBoxoSdkModule : Module() {
                                     dark = Color.parseColor(options.darkBackground)
                                 )
                             }
-                            options.lottieProgressOptions?.also { options->
-                                setProgressBarLottieFromAssets(
-                                    lightAssetPath = options.light,
-                                    darkAssetPath = options.dark,
-                                    widthDp = options.width,
-                                    heightDp = options.height
-                                )
-                            }
                         }
                         .build()
                 )

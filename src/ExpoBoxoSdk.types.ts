@@ -88,11 +88,6 @@ export type ConfigOptions = {
    * use it to customize the splash screen
    */
   splashScreenOptions?: SplashScreenOptions;
-
-  /**
-   * use it to customize miniapp progress with lottie
-   */
-  lottieProgressOptions?: LottieProgressOptions;
 };
 
 export type MiniappOptions = {
@@ -162,11 +157,4 @@ export type SplashScreenOptions = {
   lightProgressTrack: string;
   darkProgressIndicator: string;
   darkProgressTrack: string;
-};
-
-export type LottieProgressOptions = {
-    light: string;
-    dark?: string;
-    width?: number;
-    height?: number;
 };
