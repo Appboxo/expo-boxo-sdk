@@ -60,13 +60,5 @@ target 'expoboxosdkexample' do
         end
       end
     end
-
-    # Xcode 26.x / Apple Clang 21: fmt pod fails with FMT_STRING consteval (RN #55601)
-    installer.pods_project.targets.each do |target|
-      next unless target.name == 'fmt'
-      target.build_configurations.each do |cfg|
-        cfg.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
-      end
-    end
   end
 end
