@@ -15,6 +15,9 @@ struct PaymentEventData : Record {
     var transactionToken: String?
     
     @Field
+    var orderPaymentId: String?
+    
+    @Field
     var miniappOrderId: String?
     
     @Field

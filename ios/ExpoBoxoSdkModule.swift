@@ -132,6 +132,7 @@ public class ExpoBoxoSdkModule: Module {
         Function("sendPaymentEvent") { (paymentEvent : PaymentEventData) in
             let paymentData = PaymentData()
             paymentData.transactionToken = paymentEvent.transactionToken ?? ""
+            paymentData.orderPaymentId = paymentEvent.orderPaymentId ?? ""
             paymentData.miniappOrderId = paymentEvent.miniappOrderId ?? ""
             paymentData.amount = paymentEvent.amount ?? 0.0
             paymentData.currency = paymentEvent.currency ?? ""
@@ -189,6 +190,7 @@ extension ExpoBoxoSdkModule : MiniappDelegate {
         let dict = [
             "appId" : miniapp.appId,
             "transactionToken" : paymentData.transactionToken,
+            "orderPaymentId" : paymentData.orderPaymentId,
             "miniappOrderId" : paymentData.miniappOrderId,
             "amount" : paymentData.amount,
             "currency" : paymentData.currency,
