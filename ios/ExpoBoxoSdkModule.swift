@@ -101,7 +101,8 @@ public class ExpoBoxoSdkModule: Module {
             
             miniApp.setConfig(config: miniappConfig)
             DispatchQueue.main.async {
-                miniApp.open(viewController: UIApplication.shared.delegate!.window!!.rootViewController!)
+                guard let rootViewController = self.resolveRootViewController() else { return }
+                miniApp.open(viewController: rootViewController)
             }
         }
         
@@ -132,6 +133,7 @@ public class ExpoBoxoSdkModule: Module {
         Function("sendPaymentEvent") { (paymentEvent : PaymentEventData) in
             let paymentData = PaymentData()
             paymentData.transactionToken = paymentEvent.transactionToken ?? ""
+            paymentData.orderPaymentId = paymentEvent.orderPaymentId ?? ""
             paymentData.miniappOrderId = paymentEvent.miniappOrderId ?? ""
             paymentData.amount = paymentEvent.amount ?? 0.0
             paymentData.currency = paymentEvent.currency ?? ""
@@ -182,6 +184,20 @@ public class ExpoBoxoSdkModule: Module {
             }
         }
     }
+
+    private func resolveRootViewController() -> UIViewController? {
+        if #available(iOS 13.0, *) {
+            let windows = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .filter { $0.activationState == .foregroundActive || $0.activationState == .foregroundInactive }
+                .flatMap { $0.windows }
+            let keyWindow = windows.first { $0.isKeyWindow } ?? windows.first
+            if let rootViewController = keyWindow?.rootViewController {
+                return rootViewController
+            }
+        }
+        return (UIApplication.shared.delegate?.window ?? nil)?.rootViewController
+    }
 }
 
 extension ExpoBoxoSdkModule : MiniappDelegate {
@@ -189,6 +205,7 @@ extension ExpoBoxoSdkModule : MiniappDelegate {
         let dict = [
             "appId" : miniapp.appId,
             "transactionToken" : paymentData.transactionToken,
+            "orderPaymentId" : paymentData.orderPaymentId,
             "miniappOrderId" : paymentData.miniappOrderId,
             "amount" : paymentData.amount,
             "currency" : paymentData.currency,

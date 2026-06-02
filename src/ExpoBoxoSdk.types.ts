@@ -5,6 +5,7 @@ export type AuthEventPayload = {
 export type PaymentData = {
   appId: string;
   transactionToken?: string;
+  orderPaymentId?: string;
   miniappOrderId?: string;
   amount?: number;
   currency?: string;

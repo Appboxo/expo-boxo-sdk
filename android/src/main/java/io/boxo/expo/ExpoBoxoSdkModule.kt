@@ -97,6 +97,7 @@ class ExpoBoxoSdkModule : Module() {
                         "paymentEvent", mapOf(
                             "appId" to miniapp.appId,
                             "transactionToken" to paymentData.transactionToken,
+                            "orderPaymentId" to paymentData.orderPaymentId,
                             "miniappOrderId" to paymentData.miniappOrderId,
                             "amount" to paymentData.amount,
                             "currency" to paymentData.currency,
@@ -230,6 +231,7 @@ class ExpoBoxoSdkModule : Module() {
                     .sendPaymentResult(
                         PaymentData(
                             transactionToken = paymentEvent.transactionToken ?: "",
+                            orderPaymentId = paymentEvent.orderPaymentId ?: "",
                             miniappOrderId = paymentEvent.miniappOrderId ?: "",
                             amount = paymentEvent.amount ?: 0.0,
                             currency = paymentEvent.currency ?: "",
