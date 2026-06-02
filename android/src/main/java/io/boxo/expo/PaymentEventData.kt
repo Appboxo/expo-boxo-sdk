@@ -11,6 +11,9 @@ class PaymentEventData : Record {
     val transactionToken: String? = null
 
     @Field
+    val orderPaymentId: String? = null
+
+    @Field
     val miniappOrderId: String? = null
 
     @Field
