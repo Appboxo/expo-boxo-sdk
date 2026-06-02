@@ -1,4 +1,7 @@
 # Changelog
+## [0.14.0]
+- add orderPaymentId field to Payment
+
 ## [0.13.1]
 - add Lottie animation as a miniapp loader
 
