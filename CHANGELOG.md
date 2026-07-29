@@ -1,4 +1,7 @@
 # Changelog
+## [0.15.0]
+- bump native sdk versions (android 1.45.1, ios 1.29.0)
+
 ## [0.14.0]
 - add orderPaymentId field to Payment
 
